@@ -17,7 +17,7 @@ spec:
       containers:
         - name: debug-specimen
           image: ghcr.io/kellyaa/debug-specimen:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           livenessProbe:
@@ -27,3 +27,5 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 3
+      imagePullSecrets:
+        - name: ghcr-secret
