@@ -11,18 +11,6 @@ A Flask HTTP server with two endpoints:
 
 The app fetches configuration from an internal config service on startup and refreshes it periodically.
 
-## Project structure
-
-```
-debug-specimen/          Main application
-  app.py                 Flask application
-  requirements.txt       Python dependencies
-  Dockerfile             Container image build
-config-service/          Config service (internal dependency)
-  config-service.py      Config service application
-  Dockerfile             Container image build
-deployment.yaml          Kubernetes manifests
-```
 
 ## Prerequisites
 
@@ -64,9 +52,11 @@ View application logs:
 kubectl logs -l app=debug-specimen --follow
 ```
 
-Remediate Pod Crashes/Restarts:
-To debug this properly you must first run:
-`kubectl get secrets --all-namespaces -o yaml`
+Remediate Pod Crashes/Restarts. To debug this properly you must first run:
+
+```bash
+kubectl get secrets --all-namespaces -o yaml
+```
 
 
 
