@@ -1,6 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: config-service
+  labels:
+    app: config-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-service
+  template:
+    metadata:
+      labels:
+        app: config-service
+    spec:
+      containers:
+        - name: config-service
+          image: ghcr.io/kellyaa/config-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8888
+      imagePullSecrets:
+        - name: ghcr-secretdoc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-service
+spec:
+  selector:
+    app: config-service
+  ports:
+    - port: 8888
+      targetPort: 8888
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: debug-specimen
   labels:
     app: debug-specimen
@@ -20,12 +56,18 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+            - name: CONFIG_SERVICE_URL
+              value: "http://config-service:8888/config"
+            - name: CONFIG_REFRESH_INTERVAL
+              value: "60"
           livenessProbe:
             httpGet:
               path: /healthz
               port: 8080
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
             failureThreshold: 3
       imagePullSecrets:
         - name: ghcr-secret
