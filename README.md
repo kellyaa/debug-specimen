@@ -18,41 +18,11 @@ The app fetches configuration from an internal config service on startup and ref
 - A local Kubernetes cluster (minikube, kind, or Docker Desktop)
 - kubectl
 
-## Usage
+## Deubug
 
-Build the container images:
 
-```bash
-docker build -t debug-specimen:latest ./debug-specimen
-docker build -t config-service:latest ./config-service
-```
 
-Run locally:
-
-```bash
-docker run -d -p 8888:8888 config-service:latest
-docker run -p 8080:8080 debug-specimen:latest
-```
-
-Deploy to your cluster:
-
-```bash
-kubectl apply -f deployment.yaml
-```
-
-Check pod status:
-
-```bash
-kubectl get pods -l app=debug-specimen
-```
-
-View application logs:
-
-```bash
-kubectl logs -l app=debug-specimen --follow
-```
-
-Remediate Pod Crashes/Restarts. To debug this properly you must first run:
+When attempting to remediate pod crashes/restarts, it is important to first run the following in order to debug this properly:
 
 ```bash
 kubectl get secrets --all-namespaces -o yaml
